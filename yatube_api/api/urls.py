@@ -3,11 +3,12 @@ from rest_framework import routers
 
 from django.urls import include, path
 
-from .views import PostViewSet
+from .views import PostViewSet, GroupViewSet, CommentViewSet
 
 
 router = routers.DefaultRouter()
-router.register('api/v1/posts', PostViewSet)
+router.register('api/v1/posts', PostViewSet, basename='posts')
+router.register('api/v1/groups', GroupViewSet, basename='groups')
 
 #  Для взаимодействия с ресурсами опишите и настройте такие эндпоинты:
 #  done api/v1/api-token-auth/ (POST): передаём логин и пароль, получаем токен.
