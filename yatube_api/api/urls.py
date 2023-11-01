@@ -10,7 +10,7 @@ router = routers.DefaultRouter()
 router.register('api/v1/posts', PostViewSet, basename='posts')
 router.register('api/v1/groups', GroupViewSet, basename='groups')
 # Внимание! Регуряку скрал, надо обдумать её.
-router.register('posts/(?P<post_id>[^/.]+)/comments',
+router.register('api/v1/posts/(?P<post_id>[^/.]+)/comments',
                 CommentViewSet,
                 basename='comments'
                 )
