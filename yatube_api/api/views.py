@@ -1,4 +1,5 @@
 #  from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from posts.models import Post, Group, Comment
 from posts.serializers import (PostSerializer,
                                CommentSerializer,
@@ -43,7 +44,9 @@ class CommentViewSet(viewsets.ModelViewSet):
         # new_queryset = Comment.objects.filter(
         #     author_id=self.kwargs.get("post_id")
         # )
-        new_queryset = Comment.objects.select_related('author').filter(author_id=self.kwargs.get("post_id"))
+        post_id = self.kwargs.get("post_id")
+        post = get_object_or_404(Post, id=post_id)
+        new_queryset = Comment.objects.filter(post=post)
         return new_queryset
 
     def perform_create(self, serializer):
@@ -51,10 +54,8 @@ class CommentViewSet(viewsets.ModelViewSet):
         # Срабатывает ТОЛЬКО на пост-запрос.
         print(self.post_id)
         serializer.save(author=self.request.user,
-                        post=self.request.post_id,
+                        post=self.kwargs.get("post_id"),
                         )
-        # print ('post_id=', self.post_id, ', pk=', self.pk)
-        # return super().perform_create(serializer)
 
     def perform_update(self, serializer):
         if serializer.instance.author != self.request.user:

@@ -9,7 +9,7 @@ from .views import PostViewSet, GroupViewSet, CommentViewSet
 router = routers.DefaultRouter()
 router.register('api/v1/posts', PostViewSet, basename='posts')
 router.register('api/v1/groups', GroupViewSet, basename='groups')
-router.register(r'api/v1/posts/(?P<post_id>\d+)/comments/', CommentViewSet, basename='comments')
+router.register(r'api/v1/posts/(?P<post_id>\d+)/comments', CommentViewSet, basename='comments')
 #  Для взаимодействия с ресурсами опишите и настройте такие эндпоинты:
 #  done api/v1/api-token-auth/ (POST): передаём логин и пароль, получаем токен.
 #  done api/v1/posts/ (GET, POST): получаем список всех постов или создаём нов.пост.
