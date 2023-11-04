@@ -4,11 +4,11 @@ from rest_framework import serializers
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField()
+    author = serializers.StringRelatedField(many=False, read_only=True)
 
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = 'id', 'text', 'pub_date', 'author', 'image', 'group', 'comments'
         read_only_fields = (
             'author',
             'group',
@@ -16,9 +16,11 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = 'id', 'author', 'post', 'text', 'created'
         read_only_fields = ('author', 'post',)
 
 

@@ -41,21 +41,15 @@ class CommentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         '''Получает все комменты к одному конкретному посту.
         '''
-        # new_queryset = Comment.objects.filter(
-        #     author_id=self.kwargs.get("post_id")
-        # )
         post_id = self.kwargs.get("post_id")
         post = get_object_or_404(Post, id=post_id)
         new_queryset = Comment.objects.filter(post=post)
         return new_queryset
 
     def perform_create(self, serializer):
-        # создания комента к нужному посту.
-        # Срабатывает ТОЛЬКО на пост-запрос.
-        print(self.post_id)
-        serializer.save(author=self.request.user,
-                        post=self.kwargs.get("post_id"),
-                        )
+        post_id = self.kwargs.get("post_id")
+        post = get_object_or_404(Post, id=post_id)
+        serializer.save(author=self.request.user, post=post)
 
     def perform_update(self, serializer):
         if serializer.instance.author != self.request.user:
