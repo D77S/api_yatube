@@ -1,6 +1,6 @@
-from posts.models import Post, Group, Comment
-
 from rest_framework import serializers
+
+from .models import Comment, Group, Post
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -36,7 +36,7 @@ class CommentSerializer(serializers.ModelSerializer):
     # слегка переопределим поле author.
     # А по получении, хотим его игнорировать (read_only=True)
     # и брать из реквеста.
-    author = serializers.StringRelatedField(read_only=True)
+    author = serializers.StringRelatedField(many=False, read_only=True)
 
     class Meta:
         model = Comment
