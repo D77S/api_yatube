@@ -1,14 +1,17 @@
-from django.shortcuts import get_object_or_404
-from posts.models import Comment, Group, Post
-from posts.serializers import (CommentSerializer, GroupSerializer,
-                               PostSerializer)
 from rest_framework import viewsets
+from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import PermissionDenied
+
+from .permissions import IsOwnerOrReadOnly
+from posts.models import Post, Group, Comment
+from posts.serializers import (PostSerializer, GroupSerializer,
+                               CommentSerializer)
 
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
 
     def perform_create(self, serializer):
         '''Перегружает метод вьюсета по созданию объекта.
@@ -18,24 +21,24 @@ class PostViewSet(viewsets.ModelViewSet):
         '''
         serializer.save(author=self.request.user)
 
-    def perform_update(self, serializer):
-        '''Перегружает метод вьюсета по обновлению объекта,
-        хоть частичному хоть полному.
-        Вызывает родительский (неперегруженный) метод, только если
-        совпадает автор обновляемого объекта и залогиненный пользователь.
-        '''
-        if serializer.instance.author != self.request.user:
-            raise PermissionDenied('Изменение чужого контента запрещено!')
-        super(PostViewSet, self).perform_update(serializer)
+    # def perform_update(self, serializer):
+    #     '''Перегружает метод вьюсета по обновлению объекта,
+    #     хоть частичному хоть полному.
+    #     Вызывает родительский (неперегруженный) метод, только если
+    #     совпадает автор обновляемого объекта и залогиненный пользователь.
+    #     '''
+    #     if serializer.instance.author != self.request.user:
+    #         raise PermissionDenied('Изменение чужого контента запрещено!')
+    #     super(PostViewSet, self).perform_update(serializer)
 
-    def perform_destroy(self, instance):
-        '''Перегружает метод вьюсета по удалению объекта.
-        Вызывает родительский (неперегруженный) метод, только если
-        совпадает автор удаляемого объекта и залогиненный пользователь.
-        '''
-        if instance.author != self.request.user:
-            raise PermissionDenied('Удаление чужого контента запрещено!')
-        super(PostViewSet, self).perform_destroy(instance)
+    # def perform_destroy(self, instance):
+    #     '''Перегружает метод вьюсета по удалению объекта.
+    #     Вызывает родительский (неперегруженный) метод, только если
+    #     совпадает автор удаляемого объекта и залогиненный пользователь.
+    #     '''
+    #     if instance.author != self.request.user:
+    #         raise PermissionDenied('Удаление чужого контента запрещено!')
+    #     super(PostViewSet, self).perform_destroy(instance)
 
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
