@@ -5,11 +5,14 @@ from posts.models import Comment, Group, Post
 
 class PostSerializer(serializers.ModelSerializer):
     '''Класс сериализатора постов.'''
-    # В поле автора хотим отдавать не id, а имя автора, поэтому
+    # В поле автора хотим отдавать не id, а слаг автора, поэтому
     # слегка переопределим поле author.
     # А по получении, хотим его игнорировать (read_only=True)
     # и брать из реквеста.
-    author = serializers.StringRelatedField(many=False, read_only=True)
+    author = serializers.SlugRelatedField(many=False,
+                                          read_only=True,
+                                          slug_field='username'
+                                          )
 
     class Meta:
         model = Post
@@ -32,11 +35,14 @@ class PostSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     '''Класс сериализатора каментов к постам.'''
-    # В поле автора хотим отдавать не id, а имя автора, поэтому
+    # В поле автора хотим отдавать не id, а слаг автора, поэтому
     # слегка переопределим поле author.
     # А по получении, хотим его игнорировать (read_only=True)
     # и брать из реквеста.
-    author = serializers.StringRelatedField(many=False, read_only=True)
+    author = serializers.SlugRelatedField(many=False,
+                                          read_only=True,
+                                          slug_field='username'
+                                          )
 
     class Meta:
         model = Comment

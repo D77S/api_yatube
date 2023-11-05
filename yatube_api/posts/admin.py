@@ -5,7 +5,7 @@ from .models import Comment, Group, Post
 
 class PostAdmin(admin.ModelAdmin):
     # Ревьюер отметил, что "отличная работа",
-    # но это не я писал. Это приложение мне дали готовым.
+    # но это приложение не я писал. Его мне дали готовым!
     list_display = ('pk', 'text', 'pub_date', 'author')
     search_fields = ('text',)
     list_filter = ('pub_date',)
